@@ -41,6 +41,7 @@ WORKDIR /opt/src
 RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.0.3_build/ghidra_11.0.3_PUBLIC_20240410.zip
 RUN unzip ./ghidra_11.0.3_PUBLIC_20240410.zip
 COPY Docker_Ghidra_Headless_Final_1.0.ipynb .
+COPY Capa.ipynb .
 RUN pip3 install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
