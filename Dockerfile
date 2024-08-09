@@ -11,7 +11,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN pip3 install \
 jupyterlab \
-numpy \
+numpy==1.23.5 \
 matplotlib \
 pandas \
 pwntools \
@@ -38,8 +38,8 @@ jupyter-black \
 --no-cache
 
 WORKDIR /opt/src
-RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.0.3_build/ghidra_11.0.3_PUBLIC_20240410.zip
-RUN unzip ./ghidra_11.0.3_PUBLIC_20240410.zip
+RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.1.2_build/ghidra_11.1.2_PUBLIC_20240709.zip
+RUN unzip ./ghidra_11.1.2_PUBLIC_20240709.zip
 RUN pip3 install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
