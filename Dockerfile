@@ -38,8 +38,8 @@ jupyter-black \
 --no-cache
 
 WORKDIR /opt/src
-RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.2_build/ghidra_11.2_PUBLIC_20240926.zip
-RUN unzip ./ghidra_11.2_PUBLIC_20240926.zip
+RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.2.1_build/ghidra_11.2.1_PUBLIC_20241105.zip
+RUN unzip ./ghidra_11.2.1_PUBLIC_20241105.zip
 RUN pip3 install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
