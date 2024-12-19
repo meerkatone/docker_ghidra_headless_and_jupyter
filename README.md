@@ -4,7 +4,7 @@
 
 https://www.docker.com/products/docker-desktop/
 
-## Running docker without sudo under Linux From your terminal run the following:
+## Running docker without sudo under Linux - from your terminal run the following:
 
 sudo groupadd docker
 
