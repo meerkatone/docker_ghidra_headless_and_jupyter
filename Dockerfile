@@ -1,50 +1,24 @@
-FROM ubuntu:22.04
-ARG DEBIAN_FRONTEND=noninteractive
+FROM archlinux:latest
 ENV TZ=Europe/London
 
-RUN apt-get update && apt-get -y dist-upgrade
-RUN apt-get install -y git python3-pip python3-venv wget openjdk-21-jdk binwalk ent zsh zip unzip
+RUN pacman -Syu --noconfirm
+RUN pacman -S --noconfirm --needed uv bat btop neofetch xclip pyenv python-virtualenv zip unzip 7zip git fzf tmux upx neovim stow ghostty jdk-openjdk python3 lldb curl wget zsh binwalk squashfs-tools
 
 ENV VIRTUAL_ENV=/opt/headless
-RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN pip3 install \
-jupyterlab \
-numpy==1.23.5 \
-matplotlib \
-pandas \
-pwntools \
-angr \
-z3-solver \
-seaborn \
-plotly \
-scikit-learn \
-bokeh==2.4.3 \
-statsmodels \
-scipy \
-ropper \
-keystone-engine \
-ghidra_jupyter \
-ipywidgets \
-requests \
-pandas_bokeh \
-monkeyhex \
-pyvex \
-bingraphvis \
-angr-utils \
-cfg-explorer \
-jupyter-black \
---no-cache
+RUN uv venv /opt/headless --python 3.11
+RUN source /opt/headless/bin/activate
+RUN uv pip install jupyterlab numpy==1.23.5 matplotlib pandas pwntools angr angr-management z3-solver seaborn plotly scikit-learn bokeh==2.4.3 statsmodels scipy ropper keystone-engine ghidra_jupyter ipywidgets requests pandas_bokeh monkeyhex pyvex bingraphvis angr-utils cfg-explorer jupyter-black
 
 WORKDIR /opt/src
 RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.2.1_build/ghidra_11.2.1_PUBLIC_20241105.zip
 RUN unzip ./ghidra_11.2.1_PUBLIC_20241105.zip
-RUN pip3 install --upgrade pip
+RUN uv pip install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
 RUN git submodule update --init --recursive
-RUN pip3 install -e .
+RUN uv pip install -e .
 
 WORKDIR /local
 EXPOSE 8888
