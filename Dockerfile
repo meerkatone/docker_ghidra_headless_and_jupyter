@@ -2,7 +2,7 @@ FROM archlinux:latest
 ENV TZ=Europe/London
 
 RUN pacman -Syu --noconfirm
-RUN pacman -S --noconfirm --needed uv bat btop neofetch xclip pyenv python-virtualenv zip unzip 7zip git fzf tmux upx neovim stow ghostty jdk-openjdk python3 lldb curl wget zsh binwalk squashfs-tools
+RUN pacman -S --noconfirm --needed uv bat btop neofetch xclip zip unzip 7zip git fzf tmux upx neovim stow ghostty jdk-openjdk python3 lldb curl wget zsh binwalk squashfs-tools
 
 ENV VIRTUAL_ENV=/opt/headless
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
