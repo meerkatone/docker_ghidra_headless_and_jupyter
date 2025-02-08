@@ -12,8 +12,8 @@ RUN source /opt/headless/bin/activate
 RUN uv pip install jupyterlab numpy==1.23.5 matplotlib pandas pwntools angr angr-management z3-solver seaborn plotly scikit-learn bokeh==2.4.3 statsmodels scipy ropper keystone-engine ghidra_jupyter ipywidgets requests pandas_bokeh monkeyhex pyvex bingraphvis angr-utils cfg-explorer jupyter-black
 
 WORKDIR /opt/src
-RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.2.1_build/ghidra_11.2.1_PUBLIC_20241105.zip
-RUN unzip ./ghidra_11.2.1_PUBLIC_20241105.zip
+RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3_build/ghidra_11.3_PUBLIC_20250205.zip
+RUN unzip ./ghidra_11.3_PUBLIC_20250205.zip
 RUN uv pip install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
