@@ -14,6 +14,8 @@ RUN uv pip install jupyterlab numpy==1.23.5 matplotlib pandas pwntools angr angr
 WORKDIR /opt/src
 RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3_build/ghidra_11.3_PUBLIC_20250205.zip
 RUN unzip ./ghidra_11.3_PUBLIC_20250205.zip
+ENV GHIDRA_INSTALL_DIR="/opt/src/ghidra_11.3_PUBLIC/"
+RUN uv pip install pyghidra
 RUN uv pip install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
 WORKDIR /opt/src/capa
