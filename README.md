@@ -1,5 +1,8 @@
 # Docker-Ghidra-Headless-and-Jupyter
 
+Youtube video:
+https://youtu.be/Jvq-22jsxco
+
 ## Install Docker Desktop on your host machine:
 
 https://www.docker.com/products/docker-desktop/
