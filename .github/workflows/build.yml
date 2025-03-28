@@ -1,0 +1,97 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Cache Docker layers to speed up builds
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # Build the Docker image
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ghidra-jupyter:test
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      # Move cache to prevent it from growing indefinitely
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      # Run and test the Docker image
+      - name: Test Docker image
+        run: |
+          # Create a network for the container
+          docker network create ghidra-net
+          
+          # Run the container in detached mode
+          docker run -d \
+            --name ghidra-jupyter-test \
+            --network ghidra-net \
+            -p 8888:8888 \
+            ghidra-jupyter:test
+          
+          # Wait for container to start (Ghidra may take time to initialize)
+          echo "Waiting for container services to start..."
+          sleep 60
+          
+          # Check if container is still running
+          if ! docker ps | grep ghidra-jupyter-test; then
+            echo "Container failed to stay running"
+            docker logs ghidra-jupyter-test
+            exit 1
+          fi
+          
+          # Get the Jupyter token from logs
+          JUPYTER_TOKEN=$(docker logs ghidra-jupyter-test 2>&1 | grep -o "token=[a-zA-Z0-9]*" | head -1 | cut -d'=' -f2)
+          echo "Jupyter token: $JUPYTER_TOKEN"
+          
+          # Check if Jupyter server is responding
+          echo "Testing Jupyter server..."
+          if ! curl -s --retry 10 --retry-delay 5 --retry-connrefused -L "http://localhost:8888/?token=$JUPYTER_TOKEN" | grep -i jupyter; then
+            echo "Jupyter server not responding properly"
+            docker logs ghidra-jupyter-test
+            exit 1
+          fi
+          
+          # Test a basic Jupyter API endpoint
+          echo "Testing Jupyter API..."
+          if ! curl -s -L "http://localhost:8888/api/contents?token=$JUPYTER_TOKEN" | grep -i "content"; then
+            echo "Jupyter API not responding properly"
+            docker logs ghidra-jupyter-test
+            exit 1
+          fi
+          
+          echo "All tests passed!"
+          
+          # Stop and remove the container
+          docker stop ghidra-jupyter-test
+          docker rm ghidra-jupyter-test
+          docker network rm ghidra-net
+
+
