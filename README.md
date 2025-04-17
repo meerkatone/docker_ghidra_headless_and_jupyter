@@ -30,7 +30,7 @@ docker build -t headless .
 
 Disable ```Use containerd for pulling and storing images``` under Docker Desktop, "Settings" > "General"
 
-docker build -t headless . --platform=linux/arm64 --no-cache
+docker build -t headless . --platform=linux/amd64 --no-cache
 
 ## Run the docker image:
 
