@@ -12,9 +12,9 @@ RUN source /opt/headless/bin/activate
 RUN uv pip install ipython==8.32.0 jupyterlab numpy==1.23.5 matplotlib pandas pwntools angr angr-management z3-solver seaborn plotly scikit-learn bokeh==2.4.3 statsmodels scipy ropper keystone-engine ghidra_jupyter ipywidgets requests pandas_bokeh monkeyhex pyvex bingraphvis angr-utils cfg-explorer jupyter-black
 
 WORKDIR /opt/src
-RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3.2_build/ghidra_11.3.2_PUBLIC_20250415.zip
-RUN unzip ./ghidra_11.3.2_PUBLIC_20250415.zip
-ENV GHIDRA_INSTALL_DIR="/opt/src/ghidra_11.3.2_PUBLIC/"
+RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.4_build/ghidra_11.4_PUBLIC_20250620.zip
+RUN unzip ./ghidra_11.4_PUBLIC_20250620.zip
+ENV GHIDRA_INSTALL_DIR="/opt/src/ghidra_11.4_PUBLIC/"
 RUN uv pip install pyghidra
 RUN uv pip install --upgrade pip
 RUN git clone https://github.com/mandiant/capa.git
