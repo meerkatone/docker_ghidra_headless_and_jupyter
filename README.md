@@ -1,4 +1,4 @@
-# Docker-Ghidra-Headless-and-Jupyter
+# docker_ghidra_headless_and_jupyter
 
 Youtube video:
 https://youtu.be/Jvq-22jsxco
