@@ -17,7 +17,7 @@ sudo usermod -aG docker $USER
 
 ## Clone the repo:
 
-git clone https://github.com/meerkatone/Docker-Ghidra-Headless-and-Jupyter.git headless
+git clone https://github.com/meerkatone/docker_ghidra_headless_and_jupyter.git headless
 
 cd headless
 
