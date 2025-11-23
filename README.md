@@ -23,15 +23,20 @@ cd headless
 
 ## Build the docker image:
 
+```bash
 docker build -t headless .
-
+```
 
 ## Build the docker image for Apple Silicon:
 
 Disable ```Use containerd for pulling and storing images``` under Docker Desktop, "Settings" > "General"
 
+```bash
 docker build -t headless . --platform=linux/amd64 --no-cache
+```
 
 ## Run the docker image:
 
+```bash
 docker run -p 8888:8888 -it -v ${PWD}:/local headless
+```
