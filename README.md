@@ -9,17 +9,18 @@ https://www.docker.com/products/docker-desktop/
 
 ## Running docker without sudo under Linux - from your terminal run the following:
 
+```bash
 sudo groupadd docker
-
 sudo gpasswd -a $USER docker
-
 sudo usermod -aG docker $USER
+```
 
 ## Clone the repo:
 
+```bash
 git clone https://github.com/meerkatone/docker_ghidra_headless_and_jupyter.git headless
-
 cd headless
+```
 
 ## Build the docker image:
 
