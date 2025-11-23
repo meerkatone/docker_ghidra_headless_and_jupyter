@@ -1,22 +1,40 @@
 name: Docker Build and Test
-
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      
+      # Free up disk space before building
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+      
+      # Check available disk space
+      - name: Check disk space
+        run: |
+          echo "Disk space before build:"
+          df -h
+          echo "Docker disk usage:"
+          docker system df
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
+      
       # Cache Docker layers to speed up builds
       - name: Cache Docker layers
         uses: actions/cache@v3
@@ -25,7 +43,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
+      
       # Build the Docker image
       - name: Build Docker image
         uses: docker/build-push-action@v4
@@ -36,13 +54,19 @@ jobs:
           tags: ghidra-jupyter:test
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
+      
       # Move cache to prevent it from growing indefinitely
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
+      
+      # Check disk space after build
+      - name: Check disk space after build
+        run: |
+          echo "Disk space after build:"
+          df -h
+      
       # Run and test the Docker image
       - name: Test Docker image
         run: |
@@ -93,5 +117,12 @@ jobs:
           docker stop ghidra-jupyter-test
           docker rm ghidra-jupyter-test
           docker network rm ghidra-net
-
-
+      
+      # Cleanup on failure
+      - name: Cleanup on failure
+        if: failure()
+        run: |
+          docker logs ghidra-jupyter-test || true
+          docker stop ghidra-jupyter-test || true
+          docker rm ghidra-jupyter-test || true
+          docker network rm ghidra-net || true
